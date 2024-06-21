@@ -484,3 +484,20 @@ button.reset:hover:not(:has(> *)) {
 .account-logout {
   display: inline-block;
 }
+
+.newcart{
+  width: 100%;
+  margin: 0 auto;
+  text-align: justify;
+}
+.newcart thead{
+  color: var(--color-light);
+background: var(--color-dark);
+
+}
+.newcart thead th{
+  padding:.5em;
+}
+.altCollection form{
+  max-width: 100% !important;
+}

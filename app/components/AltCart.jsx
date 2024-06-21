@@ -54,73 +54,16 @@ function CartLines({lines, layout}) {
   if (!lines) return null;
 
   return (
-    <>
-    <table className="newcart">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Title</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          </tr>
-      </thead>
-      <tbody>
-      {lines.map((line) => (
-         <CartLineAltItem key={line.id} line={line} layout={layout} />
-      ))}
-      </tbody>
-    </table>
-    </>
+    <div aria-labelledby="cart-lines">
+      <ul>
+        {lines.map((line) => (
+          <CartLineItem key={line.id} line={line} layout={layout} />
+        ))}
+      </ul>
+    </div>
   );
 }
-function CartLineAltItem({layout, line}) {
-  const {id, merchandise} = line;
-  const {product, title, image, selectedOptions} = merchandise;
-  const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
-  return(<>        <tr>
-    <td>      
-      {image && (
-        <Image
-          alt={title}
-          aspectRatio="1/1"
-          data={image}
-          height={100}
-          loading="lazy"
-          width={100}
-        />
-      )}
-    </td>
-    <td>
-        <Link
-              prefetch="intent"
-              to={lineItemUrl}
-              onClick={() => {
-                if (layout === 'aside') {
-                  // close the drawer
-                  window.location.href = lineItemUrl;
-                }
-              }}
-            >
-          <p>
-            <strong>{product.title}</strong>
-          </p>
-        </Link>
-        <ul>
-          {selectedOptions.map((option) => (
-            <li key={option.name}>
-              <small>
-                {option.name}: {option.value}
-              </small>
-            </li>
-          ))}
-        </ul>
-    </td>
-    <td>
-      <CartLinePrice line={line} as="span" />
-    </td>
-    <td><CartLineQuantity line={line} /></td>
-  </tr></>);
-}
+
 /**
  * @param {{
  *   layout: CartMainProps['layout'];

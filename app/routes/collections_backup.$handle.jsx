@@ -1,13 +1,11 @@
 import {defer, redirect} from '@shopify/remix-oxygen';
-import {useLoaderData, Link, } from '@remix-run/react';
-import React from 'react';
+import {useLoaderData, Link} from '@remix-run/react';
 import {
   Pagination,
   getPaginationVariables,
   Image,
   Money,
   Analytics,
-  CartForm,AddToCartButton
 } from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
 
@@ -113,89 +111,21 @@ export default function Collection() {
  * @param {{products: ProductItemFragment[]}}
  */
 function ProductsGrid({products}) {
-  return (<>
-  <div className='altCollection'>
-  <CartForm route="/cart" action={CartForm.ACTIONS.LinesUpdate} style={{maxWidth:"100%"}}>
-    <table className="newcart">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Title</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          </tr>
-      </thead>
-      <tbody>
+  return (
+    <div className="products-grid">
       {products.map((product, index) => {
-        console.log(product);
         return (
-          <ProductItemAlt
+          <ProductItem
             key={product.id}
             product={product}
             loading={index < 8 ? 'eager' : undefined}
           />
         );
       })}
-      </tbody>
-      </table>
-      <button type="submit">Add to Cart</button>
-      </CartForm>
-      </div>
-  </>);
-}
-function ProductItemAlt({product, loading}) {
-  const [qty, setQty] = React.useState(1);
-  const variant = product.variants.nodes[0];
-  console.log(product);
-  const variantId = product.variants.nodes[0].id;
-  const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
-  return (<>
-    <tr>
-      <td>
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 70px, 100vw"
-        />
-      )}
-    </Link>
-      </td><td>
-      <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      <h4>{product.title}</h4>
-    </Link>
-        </td><td>
-        <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
-          </td>
-          <td>
-            <input type="number" name={`update[`+variant.id+`]`} min="1" value={qty}  onChange={(value) => { setQty(value.target.value); }}/>
-          </td>
-          </tr>
-    </>
+    </div>
   );
 }
+
 /**
  * @param {{
  *   product: ProductItemFragment;
@@ -255,7 +185,6 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     }
     variants(first: 1) {
       nodes {
-        id
         selectedOptions {
           name
           value
